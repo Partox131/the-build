@@ -1,0 +1,971 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Build — Game News Digest</title>
+<meta name="description" content="A daily-updating log of the video game industry: recently released games, what's landing in the next 30 days, the year's biggest remaining titles, and a rolling wire of gaming news and reviews.">
+<meta property="og:title" content="The Build — Game News Digest">
+<meta property="og:description" content="A daily-updating log of the video game industry: recent releases, upcoming games, and a rolling wire of gaming news and reviews.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#12141c">
+<style>
+  :root {
+    --bg: #f4f2ec;
+    --surface: #ffffff;
+    --surface-2: #ece8dd;
+    --border: #ddd8c8;
+    --text: #1c1f2b;
+    --text-dim: #6b6f80;
+    --teal: #1f8f6e;
+    --amber: #c8681d;
+    --rose: #b93f57;
+    --violet: #5c62c4;
+    --gold: #96751c;
+    --font-display: ui-serif, "Iowan Old Style", "Palatino Linotype", Georgia, "Times New Roman", serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    --font-mono: ui-monospace, "Cascadia Code", "SF Mono", Consolas, "Roboto Mono", monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12141c;
+      --surface: #1a1d29;
+      --surface-2: #20232f;
+      --border: #2b2f40;
+      --text: #e6e6ee;
+      --text-dim: #9a9fb5;
+      --teal: #5fc9a8;
+      --amber: #f0964a;
+      --rose: #e2677e;
+      --violet: #9aa0ee;
+      --gold: #d9b64a;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body { background: var(--bg); }
+  body {
+    margin: 0;
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  .wrap {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px 96px;
+  }
+
+  header.banner {
+    padding: 56px 0 32px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 36px;
+  }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .eyebrow .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--teal);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--teal) 20%, transparent);
+  }
+  h1.title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(34px, 5.4vw, 52px);
+    line-height: 1.06;
+    margin: 0 0 14px;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+  .dek {
+    font-size: 16.5px;
+    color: var(--text-dim);
+    max-width: 62ch;
+    margin: 0 0 28px;
+  }
+  .dek strong { color: var(--text); font-weight: 600; }
+
+  nav.jump { display: flex; flex-wrap: wrap; gap: 8px; }
+  nav.jump a {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    padding: 7px 12px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--text-dim);
+    transition: border-color .15s ease, color .15s ease;
+  }
+  nav.jump a:hover { border-color: currentColor; }
+  nav.jump a.n-recent { color: var(--teal); }
+  nav.jump a.n-future { color: var(--amber); }
+  nav.jump a.n-year { color: var(--violet); }
+  nav.jump a.n-wire { color: var(--text); }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 48px;
+  }
+  .stat { background: var(--surface); padding: 18px 16px; }
+  .stat .n {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 26px;
+    font-weight: 600;
+  }
+  .stat .l { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+  .stat.recent .n { color: var(--teal); }
+  .stat.future .n { color: var(--amber); }
+  .stat.year .n { color: var(--violet); }
+  .stat.wire .n { color: var(--text); }
+
+  section.log { margin-bottom: 52px; scroll-margin-top: 20px; }
+  .log-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 8px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .log-head .tag {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 3px 7px;
+    border-radius: 3px;
+  }
+  .log-head h2 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0;
+  }
+  .log-head .count {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-left: auto;
+    white-space: nowrap;
+  }
+  .log-sub {
+    font-size: 13.5px;
+    color: var(--text-dim);
+    margin: 0 0 18px;
+  }
+  .tag.add   { background: color-mix(in srgb, var(--teal) 16%, transparent); color: var(--teal); }
+  .tag.soon  { background: color-mix(in srgb, var(--amber) 16%, transparent); color: var(--amber); }
+  .tag.year  { background: color-mix(in srgb, var(--violet) 16%, transparent); color: var(--violet); }
+  .tag.news  { background: color-mix(in srgb, var(--rose) 16%, transparent); color: var(--rose); }
+  .tag.rate  { background: color-mix(in srgb, var(--gold) 18%, transparent); color: var(--gold); }
+
+  .entries { display: flex; flex-direction: column; }
+  .entry {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 18px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .entry:last-child { border-bottom: none; }
+  .entry .when {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    padding-top: 3px;
+    font-variant-numeric: tabular-nums;
+  }
+  .entry .body h3 {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 600;
+    margin: 0 0 4px;
+    text-wrap: balance;
+  }
+  .entry .body h3 a { text-decoration: none; }
+  .entry .body h3 a:hover { text-decoration: underline; text-decoration-color: var(--border); }
+  .platforms { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 7px; }
+  .platforms span {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.02em;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 1px 5px;
+  }
+  .entry p { margin: 0 0 8px; font-size: 14.5px; color: var(--text); }
+  .entry .src {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--text-dim);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--text-dim);
+  }
+  .entry .src:hover { color: var(--text); border-bottom-color: var(--text); }
+
+  .itag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 1px 6px;
+    border-radius: 2px;
+    margin-right: 7px;
+    vertical-align: middle;
+  }
+  .itag.news { background: color-mix(in srgb, var(--rose) 16%, transparent); color: var(--rose); }
+  .itag.rate { background: color-mix(in srgb, var(--gold) 18%, transparent); color: var(--gold); }
+
+  .wire-filter {
+    display: flex;
+    gap: 8px;
+    margin: 0 0 18px;
+  }
+  .wf-btn {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    padding: 6px 13px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: border-color .15s ease, color .15s ease, background-color .15s ease;
+  }
+  .wf-btn:hover { border-color: currentColor; }
+  .wf-btn.active { color: var(--text); border-color: var(--text); background: var(--surface-2); }
+  .wf-btn.active[data-filter="news"] {
+    color: var(--rose); border-color: var(--rose);
+    background: color-mix(in srgb, var(--rose) 12%, transparent);
+  }
+  .wf-btn.active[data-filter="rate"] {
+    color: var(--gold); border-color: var(--gold);
+    background: color-mix(in srgb, var(--gold) 14%, transparent);
+  }
+
+  footer {
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--text-dim);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  @media (max-width: 560px) {
+    .entry { grid-template-columns: 1fr; gap: 4px; }
+    .entry .when { order: -1; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal { animation: rise .5s ease both; }
+    .reveal:nth-child(2) { animation-delay: .05s; }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="banner reveal">
+    <div class="eyebrow"><span class="dot"></span>BUILD &nbsp;·&nbsp; AUG 18, 2026 &nbsp;·&nbsp; UPDATED DAILY</div>
+    <h1 class="title">The Build</h1>
+    <p class="dek">A running log of the games industry — <strong>19 released in the last 60 days</strong>, <strong>12 landing in the next 30</strong>, the year's biggest remaining titles, and a rolling wire of news and reviews.</p>
+    <nav class="jump">
+      <a class="n-recent" href="#recent">+ RECENT</a>
+      <a class="n-future" href="#future">→ CLOSE FUTURE</a>
+      <a class="n-year" href="#year">★ REST OF YEAR</a>
+      <a class="n-wire" href="#wire">WIRE</a>
+    </nav>
+  </header>
+
+  <div class="stats reveal">
+    <div class="stat recent"><div class="n">19</div><div class="l">Released, last 60d</div></div>
+    <div class="stat future"><div class="n">12</div><div class="l">Landing, next 30d</div></div>
+    <div class="stat year"><div class="n">2</div><div class="l">Rest-of-year picks</div></div>
+    <div class="stat wire"><div class="n">26</div><div class="l">Wire items, last 30d</div></div>
+  </div>
+
+  <section class="log" id="recent">
+    <div class="log-head">
+      <span class="tag add">+ADD</span>
+      <h2>Recently Released</h2>
+      <span class="count">last 60 days</span>
+    </div>
+    <p class="log-sub">Everything that's shipped since June 19 — newest first.</p>
+    <div class="entries">
+
+      <div class="entry">
+        <div class="when">AUG 18</div>
+        <div class="body">
+          <h3><a href="https://www.dlcompare.com/gaming-news/the-sinking-city-2-announces-its-official-launch-date" target="_blank" rel="noopener">The Sinking City 2</a></h3>
+          <div class="platforms"><span>PC</span><span>PS5</span><span>XBOX</span></div>
+          <p>Lovecraftian open-world detective/horror sequel set in a flooded Arkham, with expanded investigation mechanics.</p>
+          <a class="src" href="https://www.dlcompare.com/gaming-news/the-sinking-city-2-announces-its-official-launch-date" target="_blank" rel="noopener">dlcompare.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">AUG 18</div>
+        <div class="body">
+          <h3><a href="https://www.gematsu.com/2026/07/starsand-island-launches-august-18" target="_blank" rel="noopener">Starsand Island</a></h3>
+          <div class="platforms"><span>PS5</span><span>XBOX</span><span>SWITCH 2</span><span>PC</span></div>
+          <p>Seed Sparkle Lab's anime-inspired life-and-farming sim exits Early Access with its full 1.0 launch.</p>
+          <a class="src" href="https://www.gematsu.com/2026/07/starsand-island-launches-august-18" target="_blank" rel="noopener">gematsu.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">AUG 18</div>
+        <div class="body">
+          <h3><a href="https://www.gematsu.com/2026/07/twisted-tower-launches-august-18" target="_blank" rel="noopener">Twisted Tower</a></h3>
+          <div class="platforms"><span>PC</span></div>
+          <p>A "Willy Wonka meets BioShock" theme-park FPS from Thomas Brush's Atmos Games and 3D Realms, battling corrupted fairy-tale mascots in an abandoned 1950s tower.</p>
+          <a class="src" href="https://www.gematsu.com/2026/07/twisted-tower-launches-august-18" target="_blank" rel="noopener">gematsu.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">AUG 17</div>
+        <div class="body">
+          <h3><a href="https://store.steampowered.com/app/2933200/Tukoni_Forest_Keepers/" target="_blank" rel="noopener">Tukoni: Forest Keepers</a></h3>
+          <div class="platforms"><span>PC</span></div>
+          <p>A cozy, hand-drawn puzzle-adventure starring a forest spirit helping nature prepare for winter.</p>
+          <a class="src" href="https://store.steampowered.com/app/2933200/Tukoni_Forest_Keepers/" target="_blank" rel="noopener">store.steampowered.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">AUG 14</div>
+        <div class="body">
+          <h3><a href="https://store.steampowered.com/app/3091140/Lootbound/" target="_blank" rel="noopener">Lootbound</a></h3>
+          <div class="platforms"><span>PC</span></div>
+          <p>A tactical loot-management roguelite where arranging gear on a spatial grid triggers build-defining synergies.</p>
+          <a class="src" href="https://store.steampowered.com/app/3091140/Lootbound/" target="_blank" rel="noopener">store.steampowered.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">AUG 13</div>
+        <div class="body">
+          <h3><a href="https://www.gamesradar.com/games/fps/hell-let-loose-vietnam-review/" target="_blank" rel="noopener">Hell Let Loose: Vietnam</a></h3>
+          <div class="platforms"><span>PC</span><span>PS5</span><span>XBOX</span></div>
+          <p>Team17/Expression Games reimagines their hardcore 50v50 tactical shooter for the Vietnam War.</p>
+          <a class="src" href="https://www.gamesradar.com/games/fps/hell-let-loose-vietnam-review/" target="_blank" rel="noopener">gamesradar.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">AUG 13</div>
+        <div class="body">
+          <h3><a href="https://www.forbes.com/sites/brianmazique/2026/07/30/madden-27-release-date-pre-order-bonuses-and-editions/" target="_blank" rel="noopener">EA Sports Madden NFL 27</a></h3>
+          <div class="platforms"><span>PS5</span><span>XBOX</span><span>SWITCH 2</span><span>PC</span></div>
+          <p>The annual NFL sim, cover athlete Caleb Williams (Chicago Bears).</p>
+          <a class="src" href="https://www.forbes.com/sites/brianmazique/2026/07/30/madden-27-release-date-pre-order-bonuses-and-editions/" target="_blank" rel="noopener">forbes.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">AUG 13</div>
+        <div class="body">
+          <h3><a href="https://fireshinegames.co.uk/duskfade-launches-august-13th-on-pc-and-consoles/" target="_blank" rel="noopener">Duskfade</a></h3>
+          <div class="platforms"><span>PC</span><span>PS5</span><span>XBOX</span><span>SWITCH 2</span></div>
+          <p>A PS2-classics-inspired 3D platformer/adventure from Weird Beluga about a young hero and his mechanical bird companion.</p>
+          <a class="src" href="https://fireshinegames.co.uk/duskfade-launches-august-13th-on-pc-and-consoles/" target="_blank" rel="noopener">fireshinegames.co.uk ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">AUG 13</div>
+        <div class="body">
+          <h3><a href="https://www.gematsu.com/2026/06/defender-of-the-crown-the-legend-returns-launches-august-13" target="_blank" rel="noopener">Defender of the Crown: The Legend Returns</a></h3>
+          <div class="platforms"><span>PC</span><span>PS5</span><span>XBOX</span><span>SWITCH</span></div>
+          <p>A revival of the classic 1986 medieval strategy game for its 40th anniversary.</p>
+          <a class="src" href="https://www.gematsu.com/2026/06/defender-of-the-crown-the-legend-returns-launches-august-13" target="_blank" rel="noopener">gematsu.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">AUG 13</div>
+        <div class="body">
+          <h3><a href="https://store.steampowered.com/news/app/2764460/view/711152812511201479" target="_blank" rel="noopener">Sandustry</a></h3>
+          <div class="platforms"><span>PC</span><span>GAME PASS</span></div>
+          <p>A falling-sand sandbox/automation game pitched as "Terraria meets Factorio," launching into Early Access.</p>
+          <a class="src" href="https://store.steampowered.com/news/app/2764460/view/711152812511201479" target="_blank" rel="noopener">store.steampowered.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">AUG 13</div>
+        <div class="body">
+          <h3><a href="https://www.gematsu.com/2026/07/cloverpit-coming-to-ps5-switch-2-ps4-and-switch-on-august-13" target="_blank" rel="noopener">CloverPit</a></h3>
+          <div class="platforms"><span>PS5</span><span>PS4</span><span>SWITCH 2</span><span>SWITCH</span></div>
+          <p>The acclaimed PC slot-machine roguelite/horror hybrid makes its console debut, surpassing five million players worldwide.</p>
+          <a class="src" href="https://www.gematsu.com/2026/07/cloverpit-coming-to-ps5-switch-2-ps4-and-switch-on-august-13" target="_blank" rel="noopener">gematsu.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">AUG 12</div>
+        <div class="body">
+          <h3><a href="https://www.gematsu.com/2026/08/everspace-2-galactic-edition-now-available-for-switch-2" target="_blank" rel="noopener">Everspace 2: Galactic Edition</a></h3>
+          <div class="platforms"><span>SWITCH 2</span></div>
+          <p>Surprise Switch 2 port of Rockfish Games' space-combat RPG, bundling the base game plus both major expansions.</p>
+          <a class="src" href="https://www.gematsu.com/2026/08/everspace-2-galactic-edition-now-available-for-switch-2" target="_blank" rel="noopener">gematsu.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">AUG 12</div>
+        <div class="body">
+          <h3><a href="https://steambase.io/games/agefield-high-rock-the-school/info" target="_blank" rel="noopener">Agefield High: Rock the School</a></h3>
+          <div class="platforms"><span>PC</span></div>
+          <p>An open-world, early-2000s coming-of-age comedy from Refugium Games, often compared to Bully. Console versions follow later in 2026.</p>
+          <a class="src" href="https://steambase.io/games/agefield-high-rock-the-school/info" target="_blank" rel="noopener">steambase.io ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">AUG 12</div>
+        <div class="body">
+          <h3><a href="https://www.gamespress.com/Nostalgic-Comedy-Sports-Roguelike-Pro-Jank-Footy-Hits-the-First-Goal-o" target="_blank" rel="noopener">Pro Jank Footy</a></h3>
+          <div class="platforms"><span>PC</span><span>PS5</span><span>XBOX</span><span>SWITCH</span><span>SWITCH 2</span></div>
+          <p>A retro, comedic sports roguelike based on Australian Rules football, launched simultaneously across platforms.</p>
+          <a class="src" href="https://www.gamespress.com/Nostalgic-Comedy-Sports-Roguelike-Pro-Jank-Footy-Hits-the-First-Goal-o" target="_blank" rel="noopener">gamespress.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">AUG 11</div>
+        <div class="body">
+          <h3><a href="https://www.nintendolife.com/games/nintendo-switch-2/elder_scrolls_iv_oblivion_remastered" target="_blank" rel="noopener">The Elder Scrolls IV: Oblivion Remastered</a></h3>
+          <div class="platforms"><span>SWITCH 2</span></div>
+          <p>Bethesda's Unreal Engine 5 remaster lands on Switch 2 with the full main quest plus Knights of the Nine and Shivering Isles bundled in.</p>
+          <a class="src" href="https://www.nintendolife.com/games/nintendo-switch-2/elder_scrolls_iv_oblivion_remastered" target="_blank" rel="noopener">nintendolife.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">AUG 11</div>
+        <div class="body">
+          <h3><a href="https://www.gematsu.com/2026/06/grounded-2-early-access-coming-to-ps5-on-august-11-alongside-into-the-abyss-update" target="_blank" rel="noopener">Grounded 2</a></h3>
+          <div class="platforms"><span>PS5</span><span>PC</span><span>XBOX</span></div>
+          <p>Obsidian's co-op survival-crafting game where shrunken teens fight giant bugs; PS5 early access launch coincided with the "Into the Abyss" underwater update.</p>
+          <a class="src" href="https://www.gematsu.com/2026/06/grounded-2-early-access-coming-to-ps5-on-august-11-alongside-into-the-abyss-update" target="_blank" rel="noopener">gematsu.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">AUG 11</div>
+        <div class="body">
+          <h3><a href="https://www.gematsu.com/2026/08/the-lord-of-the-rings-war-in-the-north-legacy-edition-now-available-for-ps5-xbox-series-switch-2-switch-and-pc" target="_blank" rel="noopener">The Lord of the Rings: War in the North – Legacy Edition</a></h3>
+          <div class="platforms"><span>PC</span><span>PS5</span><span>XBOX</span><span>SWITCH</span><span>SWITCH 2</span></div>
+          <p>A shadow-dropped remaster of the 2011 LOTR action-RPG.</p>
+          <a class="src" href="https://www.gematsu.com/2026/08/the-lord-of-the-rings-war-in-the-north-legacy-edition-now-available-for-ps5-xbox-series-switch-2-switch-and-pc" target="_blank" rel="noopener">gematsu.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">AUG 11</div>
+        <div class="body">
+          <h3><a href="https://store.steampowered.com/app/1574480/Agent_64_Spies_Never_Die/" target="_blank" rel="noopener">Agent 64: Spies Never Die</a></h3>
+          <div class="platforms"><span>PC</span></div>
+          <p>A retro spy FPS styled after GoldenEye 007, with 14 N64-inspired missions playable solo or in co-op.</p>
+          <a class="src" href="https://store.steampowered.com/app/1574480/Agent_64_Spies_Never_Die/" target="_blank" rel="noopener">store.steampowered.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">AUG 06</div>
+        <div class="body">
+          <h3><a href="https://blog.playstation.com/2026/02/12/marvel-tokon-fighting-souls-arrives-on-ps5-pc-august-6/" target="_blank" rel="noopener">MARVEL Tōkon: Fighting Souls</a></h3>
+          <div class="platforms"><span>PS5</span><span>PC</span></div>
+          <p>Arc System Works' 4v4 tag-team fighter starring 20+ Marvel heroes and villains, with deep combo-based combat.</p>
+          <a class="src" href="https://blog.playstation.com/2026/02/12/marvel-tokon-fighting-souls-arrives-on-ps5-pc-august-6/" target="_blank" rel="noopener">blog.playstation.com ↗</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="log" id="future">
+    <div class="log-head">
+      <span class="tag soon">→SOON</span>
+      <h2>Close Future</h2>
+      <span class="count">next 30 days</span>
+    </div>
+    <p class="log-sub">Noticeable titles landing between now and September 17.</p>
+    <div class="entries">
+
+      <div class="entry">
+        <div class="when">AUG 20</div>
+        <div class="body">
+          <h3><a href="https://www.gematsu.com/2026/07/mortal-shell-ii-launches-august-20" target="_blank" rel="noopener">Mortal Shell II</a></h3>
+          <div class="platforms"><span>PC</span><span>PS5</span><span>XBOX</span></div>
+          <p>Sequel to the punishing Soulslike, continuing its "shell-shifting" combat in a new dark-fantasy setting. Early access via Devout Edition opens Aug 17.</p>
+          <a class="src" href="https://www.gematsu.com/2026/07/mortal-shell-ii-launches-august-20" target="_blank" rel="noopener">gematsu.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">AUG 20</div>
+        <div class="body">
+          <h3><a href="https://gamingonphone.com/news/gangstar-mirage-city-is-bringing-gta-like-multiplayer-experience-to-mobile-on-august-20-in-select-regions/" target="_blank" rel="noopener">Gangstar Mirage City</a></h3>
+          <div class="platforms"><span>MOBILE</span></div>
+          <p>Gameloft/Level Infinite's free-to-play open-world mobile action game, a GTA Online-style multiplayer experience.</p>
+          <a class="src" href="https://gamingonphone.com/news/gangstar-mirage-city-is-bringing-gta-like-multiplayer-experience-to-mobile-on-august-20-in-select-regions/" target="_blank" rel="noopener">gamingonphone.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">AUG 27</div>
+        <div class="body">
+          <h3><a href="https://store.steampowered.com/app/2075800/STAR_WARS_Zero_Company/" target="_blank" rel="noopener">Star Wars: Zero Company</a></h3>
+          <div class="platforms"><span>PC</span><span>PS5</span><span>XBOX</span></div>
+          <p>An XCOM-style tactical strategy game set during the Clone Wars from Bit Reactor (ex-Firaxis devs), published by EA.</p>
+          <a class="src" href="https://store.steampowered.com/app/2075800/STAR_WARS_Zero_Company/" target="_blank" rel="noopener">store.steampowered.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">AUG 27</div>
+        <div class="body">
+          <h3><a href="https://news.xbox.com/en-us/2026/06/08/resonance-plague-tale-story-combat-details-xbox-games-showcase-2026/" target="_blank" rel="noopener">Resonance: A Plague Tale Legacy</a></h3>
+          <div class="platforms"><span>PS5</span><span>XBOX</span><span>PC</span></div>
+          <p>A prequel to Asobo Studio's acclaimed A Plague Tale series. Day one on Game Pass.</p>
+          <a class="src" href="https://news.xbox.com/en-us/2026/06/08/resonance-plague-tale-story-combat-details-xbox-games-showcase-2026/" target="_blank" rel="noopener">news.xbox.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">AUG 27</div>
+        <div class="body">
+          <h3><a href="https://blog.playstation.com/2026/02/12/metal-gear-solid-master-collection-vol-2-launches-aug-27-2026-on-ps5/" target="_blank" rel="noopener">Metal Gear Solid: Master Collection Vol. 2</a></h3>
+          <div class="platforms"><span>PS5</span><span>XBOX</span><span>PC</span><span>SWITCH/2</span></div>
+          <p>Bundles Metal Gear Solid 4: Guns of the Patriots, Peace Walker, and Ghost Babel.</p>
+          <a class="src" href="https://blog.playstation.com/2026/02/12/metal-gear-solid-master-collection-vol-2-launches-aug-27-2026-on-ps5/" target="_blank" rel="noopener">blog.playstation.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">AUG 27</div>
+        <div class="body">
+          <h3><a href="https://www.gematsu.com/2026/07/the-immortal-john-triptych-launches-august-27" target="_blank" rel="noopener">The Immortal John Triptych</a></h3>
+          <div class="platforms"><span>PS5</span><span>XBOX</span><span>SWITCH/2</span><span>PC</span></div>
+          <p>A remastered anthology of three darkly comic point-and-click adventures by Joe Richardson.</p>
+          <a class="src" href="https://www.gematsu.com/2026/07/the-immortal-john-triptych-launches-august-27" target="_blank" rel="noopener">gematsu.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">AUG 28</div>
+        <div class="body">
+          <h3><a href="https://www.nintendo.com/us/whatsnew/rise-with-elden-ring-tarnished-edition-launching-aug-28-on-nintendo-switch-2/" target="_blank" rel="noopener">Elden Ring: Tarnished Edition</a></h3>
+          <div class="platforms"><span>SWITCH 2</span></div>
+          <p>FromSoftware's landmark RPG arrives on Switch 2 with Shadow of the Erdtree and two new starting classes bundled in.</p>
+          <a class="src" href="https://www.nintendo.com/us/whatsnew/rise-with-elden-ring-tarnished-edition-launching-aug-28-on-nintendo-switch-2/" target="_blank" rel="noopener">nintendo.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">AUG 31</div>
+        <div class="body">
+          <h3><a href="https://www.gematsu.com/2026/08/serious-sam-shatterverse-launches-august-31" target="_blank" rel="noopener">Serious Sam: Shatterverse</a></h3>
+          <div class="platforms"><span>PC</span><span>PS5</span><span>XBOX</span></div>
+          <p>A five-player co-op roguelite spin on Croteam's classic run-and-gun formula.</p>
+          <a class="src" href="https://www.gematsu.com/2026/08/serious-sam-shatterverse-launches-august-31" target="_blank" rel="noopener">gematsu.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">SEP 03</div>
+        <div class="body">
+          <h3><a href="https://en.bandainamcoent.eu/dawnwalker/news/the-blood-of-dawnwalker-will-launch-september-3-rebel-wolves-revealed-key-details" target="_blank" rel="noopener">The Blood of Dawnwalker</a></h3>
+          <div class="platforms"><span>PS5</span><span>XBOX</span><span>PC</span></div>
+          <p>A dark-fantasy open-world action RPG from Rebel Wolves (ex-CD Projekt Red devs); play a half-human, half-vampire.</p>
+          <a class="src" href="https://en.bandainamcoent.eu/dawnwalker/news/the-blood-of-dawnwalker-will-launch-september-3-rebel-wolves-revealed-key-details" target="_blank" rel="noopener">en.bandainamcoent.eu ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">SEP 04</div>
+        <div class="body">
+          <h3><a href="https://www.capcom.co.jp/ir/english/news/html/e260702.html" target="_blank" rel="noopener">Onimusha: Way of the Sword</a></h3>
+          <div class="platforms"><span>PS5</span><span>XBOX</span><span>SWITCH 2</span><span>PC</span></div>
+          <p>Capcom's first new Onimusha in 20+ years; a samurai action-adventure starring Miyamoto Musashi.</p>
+          <a class="src" href="https://www.capcom.co.jp/ir/english/news/html/e260702.html" target="_blank" rel="noopener">capcom.co.jp ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">SEP 09</div>
+        <div class="body">
+          <h3><a href="https://www.pcgamer.com/games/survival-crafting/after-half-a-decade-valheim-1-0-finally-has-a-release-date/" target="_blank" rel="noopener">Valheim 1.0</a></h3>
+          <div class="platforms"><span>PC</span><span>XBOX</span><span>PS5</span><span>SWITCH 2</span></div>
+          <p>The hit Viking survival-crafting game exits Early Access after 5.5 years with its final "Deep North" biome and full crossplay.</p>
+          <a class="src" href="https://www.pcgamer.com/games/survival-crafting/after-half-a-decade-valheim-1-0-finally-has-a-release-date/" target="_blank" rel="noopener">pcgamer.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">SEP 15</div>
+        <div class="body">
+          <h3><a href="https://www.techradar.com/gaming/look-alive-bub-marvels-wolverine-gets-long-awaited-release-date-and-yes-its-still-coming-this-year" target="_blank" rel="noopener">Marvel's Wolverine</a></h3>
+          <div class="platforms"><span>PS5</span></div>
+          <p>Insomniac Games' single-player action-adventure starring Logan — one of the most anticipated PS5 exclusives of the year.</p>
+          <a class="src" href="https://www.techradar.com/gaming/look-alive-bub-marvels-wolverine-gets-long-awaited-release-date-and-yes-its-still-coming-this-year" target="_blank" rel="noopener">techradar.com ↗</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="log" id="year">
+    <div class="log-head">
+      <span class="tag year">★YEAR</span>
+      <h2>Rest of Year</h2>
+      <span class="count">top picks, beyond 30 days</span>
+    </div>
+    <p class="log-sub">A short, curated list of the year's biggest remaining titles — not exhaustive, just the ones worth marking a calendar for.</p>
+    <div class="entries">
+
+      <div class="entry">
+        <div class="when">OCT 29</div>
+        <div class="body">
+          <h3><a href="https://blog.playstation.com/2026/08/11/watch-the-phantom-blade-zero-gameplay-deep-dive-state-of-play-on-august-17-pre-orders-live-today/" target="_blank" rel="noopener">Phantom Blade Zero</a></h3>
+          <div class="platforms"><span>PS5</span><span>PC</span></div>
+          <p>S-GAME's dark wuxia action-RPG built in Unreal Engine 5, starring warrior Soul with 66 days left to live; PS5 console-exclusive for its first year.</p>
+          <a class="src" href="https://blog.playstation.com/2026/08/11/watch-the-phantom-blade-zero-gameplay-deep-dive-state-of-play-on-august-17-pre-orders-live-today/" target="_blank" rel="noopener">blog.playstation.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="when">NOV 19</div>
+        <div class="body">
+          <h3><a href="https://variety.com/2026/gaming/news/gta-6-trailer-netflix-youtube-aug-27-1236789693/" target="_blank" rel="noopener">Grand Theft Auto VI</a></h3>
+          <div class="platforms"><span>PS5</span><span>XBOX</span></div>
+          <p>Rockstar's massively anticipated open-world crime saga; pre-orders have "vastly" beaten forecasts ahead of launch.</p>
+          <a class="src" href="https://variety.com/2026/gaming/news/gta-6-trailer-netflix-youtube-aug-27-1236789693/" target="_blank" rel="noopener">variety.com ↗</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="log" id="wire">
+    <div class="log-head">
+      <h2>The Wire</h2>
+      <span class="count">news &amp; reviews, last 30 days</span>
+    </div>
+    <p class="log-sub">A running feed, newest first — every notable industry story and review, mixed together as it happened.</p>
+    <div class="wire-filter" role="group" aria-label="Filter The Wire">
+      <button type="button" class="wf-btn active" data-filter="all" aria-pressed="true">All</button>
+      <button type="button" class="wf-btn" data-filter="news" aria-pressed="false">News</button>
+      <button type="button" class="wf-btn" data-filter="rate" aria-pressed="false">Reviews</button>
+    </div>
+    <div class="entries">
+
+      <div class="entry" data-type="news">
+        <div class="when">AUG 18</div>
+        <div class="body">
+          <h3><span class="itag news">!NEWS</span><a href="https://www.techtimes.com/articles/324874/20260818/gamescom-2026-first-ever-sold-out-floor-full-schedule-where-watch.htm" target="_blank" rel="noopener">Gamescom 2026 confirms first-ever sold-out show floor</a></h3>
+          <p>Ahead of the Aug 26-30 Cologne event, organizers confirmed a sold-out exhibition floor; Geoff Keighley's Opening Night Live kicks off the showcase on Aug 25.</p>
+          <a class="src" href="https://www.techtimes.com/articles/324874/20260818/gamescom-2026-first-ever-sold-out-floor-full-schedule-where-watch.htm" target="_blank" rel="noopener">techtimes.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry" data-type="rate">
+        <div class="when">AUG 18</div>
+        <div class="body">
+          <h3><span class="itag rate">★RATE</span><a href="https://opencritic.com/game/20806/the-sinking-city-2" target="_blank" rel="noopener">The Sinking City 2 — OpenCritic 81, "Strong"</a></h3>
+          <p>Critics praise the Lovecraftian sequel's improved investigation and survival-horror systems; Steam users are at 95% positive.</p>
+          <a class="src" href="https://opencritic.com/game/20806/the-sinking-city-2" target="_blank" rel="noopener">opencritic.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry" data-type="news">
+        <div class="when">AUG 18</div>
+        <div class="body">
+          <h3><span class="itag news">!NEWS</span><a href="https://www.gamesradar.com/games/events-conferences/gamescom-2026-schedule/" target="_blank" rel="noopener">Gamescom Opening Night Live (Aug 25) lineup adds FF7 Revelation, Witcher 3, Metro 2039</a></h3>
+          <p>Geoff Keighley's showcase will feature a new look at Final Fantasy VII Revelation (Switch 2/PS5/Xbox, spring 2027), first footage of The Witcher 3: Songs of the Past expansion (2027), and a new Metro 2039 trailer ahead of its February 2027 launch.</p>
+          <a class="src" href="https://www.gamesradar.com/games/events-conferences/gamescom-2026-schedule/" target="_blank" rel="noopener">gamesradar.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry" data-type="news">
+        <div class="when">AUG 17</div>
+        <div class="body">
+          <h3><span class="itag news">!NEWS</span><a href="https://variety.com/2026/gaming/news/mattel-game-studios-hot-wheels-uno-1236833285/" target="_blank" rel="noopener">Mattel launches Mattel Game Studios</a></h3>
+          <p>The toy giant formed a new ~300-person digital games division spanning LA and Hangzhou to self-publish original titles based on Hot Wheels, UNO, and other Mattel IP.</p>
+          <a class="src" href="https://variety.com/2026/gaming/news/mattel-game-studios-hot-wheels-uno-1236833285/" target="_blank" rel="noopener">variety.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry" data-type="news">
+        <div class="when">AUG 17</div>
+        <div class="body">
+          <h3><span class="itag news">!NEWS</span><a href="https://www.gamedeveloper.com/business/inner-pocket-is-a-new-indie-publishing-label-that-wants-to-champion-intimate-experiences" target="_blank" rel="noopener">Publishing veterans launch indie label Inner Pocket</a></h3>
+          <p>Alums of Critical Reflex, Gaijin Entertainment, and Nozomu Games formed Inner Pocket to publish and curate 'curiosity games'; debut titles include Burn With Me and Nonolith.</p>
+          <a class="src" href="https://www.gamedeveloper.com/business/inner-pocket-is-a-new-indie-publishing-label-that-wants-to-champion-intimate-experiences" target="_blank" rel="noopener">gamedeveloper.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry" data-type="rate">
+        <div class="when">AUG 17</div>
+        <div class="body">
+          <h3><span class="itag rate">★RATE</span><a href="https://www.purexbox.com/news/2026/08/roundup-the-first-reviews-have-arrived-for-mortal-shell-2" target="_blank" rel="noopener">Mortal Shell II (Devout Edition early access) — OpenCritic 85, "Mighty"</a></h3>
+          <p>Critics call it a major leap over the original and one of the best non-FromSoftware soulslikes, praising its stamina-free combat redesign; Metacritic sits at 83.</p>
+          <a class="src" href="https://www.purexbox.com/news/2026/08/roundup-the-first-reviews-have-arrived-for-mortal-shell-2" target="_blank" rel="noopener">purexbox.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry" data-type="rate">
+        <div class="when">AUG 17</div>
+        <div class="body">
+          <h3><span class="itag rate">★RATE</span><a href="https://ladiesgamers.com/tukoni-forest-keepers-review/" target="_blank" rel="noopener">Tukoni: Forest Keepers — Steam "Very Positive"</a></h3>
+          <p>The cozy, storybook-style puzzle-adventure based on Oksana Bula's books launched to 100% positive early Steam reviews, praised for its charm and hand-drawn art.</p>
+          <a class="src" href="https://ladiesgamers.com/tukoni-forest-keepers-review/" target="_blank" rel="noopener">ladiesgamers.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry" data-type="news">
+        <div class="when">AUG 17</div>
+        <div class="body">
+          <h3><span class="itag news">!NEWS</span><a href="https://www.playstationlifestyle.net/2026/08/17/phantom-blade-zero-state-of-play-ps5-action-rpg/" target="_blank" rel="noopener">Phantom Blade Zero goes gold, locks October 29 release date</a></h3>
+          <p>S-GAME's wuxia action-RPG confirmed its PS5/PC launch date at a dedicated State of Play showcasing ~20 minutes of new gameplay; pre-orders are now live.</p>
+          <a class="src" href="https://www.playstationlifestyle.net/2026/08/17/phantom-blade-zero-state-of-play-ps5-action-rpg/" target="_blank" rel="noopener">playstationlifestyle.net ↗</a>
+        </div>
+      </div>
+
+      <div class="entry" data-type="rate">
+        <div class="when">AUG 14</div>
+        <div class="body">
+          <h3><span class="itag rate">★RATE</span><a href="https://www.techtimes.com/articles/324346/20260813/lootbound-launches-today-inventory-auras-turn-gear-placement-build-design.htm" target="_blank" rel="noopener">Lootbound — 90/100</a></h3>
+          <p>Praised for its inventory-as-build-system design, where gear placement triggers synergies; backed by an 87% positive Steam demo.</p>
+          <a class="src" href="https://www.techtimes.com/articles/324346/20260813/lootbound-launches-today-inventory-auras-turn-gear-placement-build-design.htm" target="_blank" rel="noopener">techtimes.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry" data-type="news">
+        <div class="when">AUG 13</div>
+        <div class="body">
+          <h3><span class="itag news">!NEWS</span><a href="https://www.videogameschronicle.com/news/xbox-ceo-asha-sharma-says-the-elder-scrolls-6-is-incredible-as-bethesda-protesters-put-up-giant-rat-outside-building/" target="_blank" rel="noopener">Bethesda union workers protest Xbox CEO's studio visit</a></h3>
+          <p>Roughly 800 red flags and an inflatable rat greeted Xbox CEO Asha Sharma outside Bethesda's offices, a protest over ongoing layoffs.</p>
+          <a class="src" href="https://www.videogameschronicle.com/news/xbox-ceo-asha-sharma-says-the-elder-scrolls-6-is-incredible-as-bethesda-protesters-put-up-giant-rat-outside-building/" target="_blank" rel="noopener">videogameschronicle.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry" data-type="news">
+        <div class="when">AUG 13</div>
+        <div class="body">
+          <h3><span class="itag news">!NEWS</span><a href="https://variety.com/2026/gaming/news/gta-6-trailer-netflix-youtube-aug-27-1236789693/" target="_blank" rel="noopener">GTA 6's next trailer confirmed for a Netflix premiere on August 27</a></h3>
+          <p>Rockstar's "Extended Look" debuts on Netflix before YouTube; Take-Two says pre-orders have "vastly" beaten forecasts ahead of the November 19 launch.</p>
+          <a class="src" href="https://variety.com/2026/gaming/news/gta-6-trailer-netflix-youtube-aug-27-1236789693/" target="_blank" rel="noopener">variety.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry" data-type="news">
+        <div class="when">AUG 13</div>
+        <div class="body">
+          <h3><span class="itag news">!NEWS</span><a href="https://gameinformer.com/2026/08/13/netflix-closes-two-gaming-studios-including-oxenfree-developer-night-school" target="_blank" rel="noopener">Netflix closes Night School Studio (Oxenfree) and Moonlot Games</a></h3>
+          <p>Netflix shut down its largest internal studio along with an unreleased Helsinki studio, refocusing gaming efforts on kids' and party games.</p>
+          <a class="src" href="https://gameinformer.com/2026/08/13/netflix-closes-two-gaming-studios-including-oxenfree-developer-night-school" target="_blank" rel="noopener">gameinformer.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry" data-type="news">
+        <div class="when">AUG 13</div>
+        <div class="body">
+          <h3><span class="itag news">!NEWS</span><a href="https://www.pcgamer.com/gaming-industry/3-months-after-the-release-of-directive-8020-supermassive-games-is-laying-off-even-more-people/" target="_blank" rel="noopener">Supermassive Games announces a third layoff round in three years</a></h3>
+          <p>Up to 75 staff face cuts just three months after Directive 8020 launched, bringing total layoffs since 2024 to roughly 200.</p>
+          <a class="src" href="https://www.pcgamer.com/gaming-industry/3-months-after-the-release-of-directive-8020-supermassive-games-is-laying-off-even-more-people/" target="_blank" rel="noopener">pcgamer.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry" data-type="news">
+        <div class="when">AUG 13</div>
+        <div class="body">
+          <h3><span class="itag news">!NEWS</span><a href="https://kotaku.com/witcher-multiplayer-project-suffers-another-round-of-layoffs-2000723777" target="_blank" rel="noopener">CD Projekt Red cuts Project Sirius team again</a></h3>
+          <p>18 people were laid off from the Witcher multiplayer spinoff, dropping headcount from 83 to about 65.</p>
+          <a class="src" href="https://kotaku.com/witcher-multiplayer-project-suffers-another-round-of-layoffs-2000723777" target="_blank" rel="noopener">kotaku.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry" data-type="news">
+        <div class="when">AUG 13</div>
+        <div class="body">
+          <h3><span class="itag news">!NEWS</span><a href="https://www.forbes.com/sites/paultassi/2026/08/13/twitch-admits-nobody-would-opt-in-to-ai-training-heres-how-to-opt-out/" target="_blank" rel="noopener">Twitch backlash over default opt-in AI training on streamer content</a></h3>
+          <p>Twitch confirmed Amazon can use creators' streams to train generative AI with an opt-out default; after backlash, Twitch added a clearer opt-out toggle.</p>
+          <a class="src" href="https://www.forbes.com/sites/paultassi/2026/08/13/twitch-admits-nobody-would-opt-in-to-ai-training-heres-how-to-opt-out/" target="_blank" rel="noopener">forbes.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry" data-type="rate">
+        <div class="when">AUG 13</div>
+        <div class="body">
+          <h3><span class="itag rate">★RATE</span><a href="https://gamecritics.com/jack-dunn/cloverpit-review/" target="_blank" rel="noopener">CloverPit (console launch) — mostly 8–9.4/10</a></h3>
+          <p>Praised as an addictive, unsettling slot-machine roguelite; one outlier called it repetitive at 5/10.</p>
+          <a class="src" href="https://gamecritics.com/jack-dunn/cloverpit-review/" target="_blank" rel="noopener">gamecritics.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry" data-type="news">
+        <div class="when">AUG 12</div>
+        <div class="body">
+          <h3><span class="itag news">!NEWS</span><a href="https://www.videogameschronicle.com/news/amazon-game-studios-gives-lost-ark-and-throne-liberty-back-to-their-studios-to-run-ending-its-mmo-presence/" target="_blank" rel="noopener">Amazon exits the MMO business</a></h3>
+          <p>Amazon Games will hand live-service operations of Lost Ark and Throne and Liberty back to original developers Smilegate and NCsoft/FirstSpark by early 2027.</p>
+          <a class="src" href="https://www.videogameschronicle.com/news/amazon-game-studios-gives-lost-ark-and-throne-liberty-back-to-their-studios-to-run-ending-its-mmo-presence/" target="_blank" rel="noopener">videogameschronicle.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry" data-type="news">
+        <div class="when">AUG 12</div>
+        <div class="body">
+          <h3><span class="itag news">!NEWS</span><a href="https://blog.playstation.com/2026/08/12/kinetic-publishing-showcase-recap-5-new-indie-games-coming-to-ps5/" target="_blank" rel="noopener">Kinetic Publishing debuts as a new indie publisher</a></h3>
+          <p>The Phasmophobia team's new publishing arm revealed its first five titles, including a new sci-fi horror project from Sam Barlow (Her Story, Immortality).</p>
+          <a class="src" href="https://blog.playstation.com/2026/08/12/kinetic-publishing-showcase-recap-5-new-indie-games-coming-to-ps5/" target="_blank" rel="noopener">blog.playstation.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry" data-type="news">
+        <div class="when">AUG 11</div>
+        <div class="body">
+          <h3><span class="itag news">!NEWS</span><a href="https://www.forbes.com/sites/forbes-personal-shopper/2026/08/11/nintendo-switch-2-price-increase/" target="_blank" rel="noopener">Nintendo Switch 2 price rises from $450 to $500 on September 1</a></h3>
+          <p>Nintendo confirmed the hike this week, making August the last chance to buy the console at its original launch price.</p>
+          <a class="src" href="https://www.forbes.com/sites/forbes-personal-shopper/2026/08/11/nintendo-switch-2-price-increase/" target="_blank" rel="noopener">forbes.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry" data-type="rate">
+        <div class="when">AUG 11</div>
+        <div class="body">
+          <h3><span class="itag rate">★RATE</span><a href="https://www.techradar.com/gaming/nintendo-switch/lies-of-p-complete-edition-review" target="_blank" rel="noopener">Lies of P: Complete Edition (Switch 2 port) — overwhelmingly positive</a></h3>
+          <p>Praised as one of the finest FromSoft-style soulslikes with a strong, accessible Switch 2 port.</p>
+          <a class="src" href="https://www.techradar.com/gaming/nintendo-switch/lies-of-p-complete-edition-review" target="_blank" rel="noopener">techradar.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry" data-type="rate">
+        <div class="when">AUG 11</div>
+        <div class="body">
+          <h3><span class="itag rate">★RATE</span><a href="https://www.nintendolife.com/news/2026/08/round-up-the-reviews-for-the-elder-scrolls-iv-oblivion-remastered-on-switch-2-are-in" target="_blank" rel="noopener">The Elder Scrolls IV: Oblivion Remastered (Switch 2 port) — 7.5–8/10</a></h3>
+          <p>A visually impressive port with intact ray-traced lighting, held back by frame rates swinging between 30–60fps.</p>
+          <a class="src" href="https://www.nintendolife.com/news/2026/08/round-up-the-reviews-for-the-elder-scrolls-iv-oblivion-remastered-on-switch-2-are-in" target="_blank" rel="noopener">nintendolife.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry" data-type="rate">
+        <div class="when">AUG 11</div>
+        <div class="body">
+          <h3><span class="itag rate">★RATE</span><a href="https://www.gamingbible.com/news/agent-64-spies-never-die-steam-release-687845-20260812" target="_blank" rel="noopener">Agent 64: Spies Never Die — split verdict</a></h3>
+          <p>"Mixed" 72 on Metacritic from critics citing dated design, versus "Very Positive" (90%) Steam user reviews praising the GoldenEye-style nostalgia.</p>
+          <a class="src" href="https://www.gamingbible.com/news/agent-64-spies-never-die-steam-release-687845-20260812" target="_blank" rel="noopener">gamingbible.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry" data-type="rate">
+        <div class="when">AUG 06</div>
+        <div class="body">
+          <h3><span class="itag rate">★RATE</span><a href="https://opencritic.com/game/20101/marvel-tokon-fighting-souls" target="_blank" rel="noopener">MARVEL Tōkon: Fighting Souls — IGN 90/100</a></h3>
+          <p>Called "the total package" for the fighting genre — praised for visuals, accessibility, and training/story modes.</p>
+          <a class="src" href="https://opencritic.com/game/20101/marvel-tokon-fighting-souls" target="_blank" rel="noopener">opencritic.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry" data-type="news">
+        <div class="when">AUG 04</div>
+        <div class="body">
+          <h3><span class="itag news">!NEWS</span><a href="https://www.gamesradar.com/games/mass-layoffs-expected-at-ea-as-the-now-private-publisher-reportedly-tells-its-new-debt-masters-that-its-going-to-cut-usd700-million-in-annual-costs/" target="_blank" rel="noopener">EA completes $55B take-private acquisition, braces for mass layoffs</a></h3>
+          <p>EA officially closed its take-private deal with Saudi Arabia's PIF, Silver Lake, and Affinity Partners; reports say the newly private EA is targeting ~$700M in annual cost cuts to service $18B in acquisition debt.</p>
+          <a class="src" href="https://www.gamesradar.com/games/mass-layoffs-expected-at-ea-as-the-now-private-publisher-reportedly-tells-its-new-debt-masters-that-its-going-to-cut-usd700-million-in-annual-costs/" target="_blank" rel="noopener">gamesradar.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry" data-type="rate">
+        <div class="when">AUG 04</div>
+        <div class="body">
+          <h3><span class="itag rate">★RATE</span><a href="https://www.metacritic.com/game/big-walk/" target="_blank" rel="noopener">Big Walk — Metacritic 91, "Universal Acclaim"</a></h3>
+          <p>House House's co-op "walker-talker" praised for emergent puzzles and warmth; one of 2026's best-reviewed games.</p>
+          <a class="src" href="https://www.metacritic.com/game/big-walk/" target="_blank" rel="noopener">metacritic.com ↗</a>
+        </div>
+      </div>
+
+      <div class="entry" data-type="rate">
+        <div class="when">AUG 04</div>
+        <div class="body">
+          <h3><span class="itag rate">★RATE</span><a href="https://gamedaily.com/games/beast-of-reincarnation-review-roundup" target="_blank" rel="noopener">Beast of Reincarnation — OpenCritic ~76</a></h3>
+          <p>Game Freak's first non-Pokémon title, a Sekiro-inspired soulslike; reviewers split on a "promising but flawed" atmospheric game.</p>
+          <a class="src" href="https://gamedaily.com/games/beast-of-reincarnation-review-roundup" target="_blank" rel="noopener">gamedaily.com ↗</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <span>Compiled by a daily Claude Code routine · backed by a Google Sheet data store · sources linked throughout</span>
+    <span>Last updated Aug 18, 2026</span>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  var wire = document.getElementById('wire');
+  if (!wire) return;
+  var btns = wire.querySelectorAll('.wf-btn');
+  var entries = wire.querySelectorAll('.entries > .entry');
+  btns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      btns.forEach(function (b) {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
+      var f = btn.getAttribute('data-filter');
+      entries.forEach(function (e) {
+        e.style.display = (f === 'all' || e.getAttribute('data-type') === f) ? '' : 'none';
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>
