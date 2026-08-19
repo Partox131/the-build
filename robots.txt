@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://partox131.github.io/the-build/sitemap.xml
