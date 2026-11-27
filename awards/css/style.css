@@ -42,6 +42,11 @@ code { font-size: .9em; background: var(--surface-2); padding: 1px 5px; border-r
   color: var(--gold-2); font-size: 13px; text-align: center; padding: 6px 16px;
   border-bottom: 1px solid #4a3a00;
 }
+.demo-banner button, .demo-banner a {
+  font: 600 12px/1 var(--body); margin-left: 8px; padding: 5px 9px; border-radius: 6px; cursor: pointer;
+  background: #3a2f00; color: var(--gold-2); border: 1px solid #5c4a00; text-decoration: none; display: inline-block;
+}
+.demo-banner button:hover, .demo-banner a:hover { background: #4a3c00; }
 
 /* ───────── shared bits ───────── */
 .wrap { max-width: 780px; margin: 0 auto; padding: 0 16px 80px; }

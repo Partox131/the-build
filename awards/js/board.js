@@ -25,7 +25,27 @@ const nomOf = (catId, nomId) => CAT_BY_ID[catId]?.nominees.find((n) => n.id === 
     const cd = $("#cd");
     if (cd) cd.textContent = countdown(config.lockAt - Date.now());
   });
+  if (store.mode === "preview") startPreviewShow();
 })();
+
+// Preview: hand out a new fake award every few seconds so the animations can be seen.
+function startPreviewShow() {
+  const EVERY = 6;
+  let paused = false, t = EVERY;
+  const status = $("#pv-status"), pauseBtn = $("#pv-pause");
+  const next = () => { t = EVERY; store.previewNext(); };
+  $("#pv-next").onclick = next;
+  pauseBtn.onclick = () => { paused = !paused; pauseBtn.textContent = paused ? "Resume" : "Pause"; };
+  const timer = setInterval(() => {
+    if (phase(config, results) === "final") {
+      status.textContent = "Show's over.";
+      pauseBtn.hidden = true; $("#pv-next").hidden = true;
+      return clearInterval(timer);
+    }
+    if (!paused && --t <= 0) next();
+    status.textContent = paused ? "Paused." : `Next award in ${Math.max(t, 0)}s.`;
+  }, 1000);
+}
 
 function watchBallots() {
   if (unwatchBallots) return;
