@@ -14,10 +14,35 @@ import { EVENT, CATEGORIES, slug } from "./data.js";
 const DEFAULT_LOCK = Date.parse(EVENT.defaultLockAt);
 export const nameToId = (name) => slug(name).slice(0, 32);
 
+// ?preview → in-memory fake show (fake players, half the awards given), never touches Firebase.
+export const PREVIEW = new URLSearchParams(location.search).has("preview");
+
 let storePromise;
 export function getStore() {
-  if (!storePromise) storePromise = FIREBASE_CONFIG.apiKey ? liveStore() : Promise.resolve(demoStore());
+  if (!storePromise) {
+    storePromise = PREVIEW ? Promise.resolve(demoStore({ memory: makePreviewState() }))
+      : FIREBASE_CONFIG.apiKey ? liveStore() : Promise.resolve(demoStore());
+  }
   return storePromise;
+}
+
+const pickOne = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+function makePreviewState() {
+  const names = ["Alex", "Jordan", "Sam", "Priya", "Marco", "Lena", "Kai", "Noor"];
+  const players = {}, ballots = {}, secrets = {}, results = {};
+  for (const name of names) {
+    const id = nameToId(name), picks = {};
+    for (const c of CATEGORIES) picks[c.id] = pickOne(c.nominees).id;
+    players[id] = { name, count: CATEGORIES.length };
+    ballots[id] = { picks, tiebreak: Math.floor(Math.random() * (EVENT.tiebreak.max + 1)) };
+    secrets[id] = "0000";
+  }
+  // About 40% of the show done, given 4 minutes apart. Game of the Year always comes last.
+  const pool = CATEGORIES.filter((c) => c.points < 5).sort(() => Math.random() - 0.5).slice(0, 12);
+  const now = Date.now();
+  pool.forEach((c, i) => { results[c.id] = { winner: pickOne(c.nominees).id, at: now - (pool.length - i) * 240000 }; });
+  return { config: { lockAt: now - 2 * 3600000, tiebreakAnswer: null }, players, ballots, secrets, results };
 }
 
 export class StoreError extends Error {
@@ -26,7 +51,7 @@ export class StoreError extends Error {
 
 /* ───────────────────────── DEMO (localStorage) ───────────────────────── */
 
-function demoStore() {
+function demoStore({ memory } = {}) {
   const KEY = "tga-pool-demo-v1";
   const ME = "tga-pool-demo-me";
   const fresh = () => ({
@@ -36,14 +61,14 @@ function demoStore() {
   const load = () => {
     try { return JSON.parse(localStorage.getItem(KEY)) || fresh(); } catch { return fresh(); }
   };
-  let state = load();
+  let state = memory || load();
   const subs = new Set();
   const emit = () => subs.forEach((f) => f());
   const save = () => {
-    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {}
+    if (!memory) { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} }
     emit();
   };
-  addEventListener("storage", (e) => { if (e.key === KEY) { state = load(); emit(); } });
+  if (!memory) addEventListener("storage", (e) => { if (e.key === KEY) { state = load(); emit(); } });
   const watch = (select, cb) => {
     const f = () => cb(structuredClone(select()));
     subs.add(f);
@@ -55,7 +80,17 @@ function demoStore() {
   const setMe = (v) => { try { v ? localStorage.setItem(ME, v) : localStorage.removeItem(ME); } catch {} };
 
   const store = {
-    mode: "demo",
+    mode: memory ? "preview" : "demo",
+    // preview only: announce the next award (random category, random winner; GOTY saved for last)
+    previewNext() {
+      const left = CATEGORIES.filter((c) => !state.results[c.id]);
+      if (!left.length) return false;
+      const c = left.find((x) => x.points < 5) ? pickOne(left.filter((x) => x.points < 5)) : left[0];
+      state.results[c.id] = { winner: pickOne(c.nominees).id, at: Date.now() };
+      if (left.length === 1) state.config.tiebreakAnswer = Math.floor(Math.random() * 4);
+      save();
+      return true;
+    },
     async session() {
       const id = getMe();
       return id && state.players[id] ? { ballotId: id } : null;

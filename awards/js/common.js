@@ -36,10 +36,16 @@ export function phase(config, results) {
 }
 
 export function demoBanner(store) {
-  if (store.mode !== "demo") return;
+  if (store.mode !== "demo" && store.mode !== "preview") return;
   const b = document.createElement("div");
   b.className = "demo-banner";
-  b.innerHTML = `<strong>Demo mode</strong> — data lives in this browser only. Add your Firebase config in <code>js/config.js</code> to go live.`;
+  b.innerHTML = store.mode === "preview"
+    ? `<strong>Preview</strong> — fake players and results, nothing is saved. <span id="pv-status"></span>
+       <button type="button" id="pv-next">Next award</button>
+       <button type="button" id="pv-pause">Pause</button>
+       <a href="${esc(location.pathname)}?preview">Restart</a>
+       <a href="${esc(location.pathname)}">Exit preview</a>`
+    : `<strong>Demo mode</strong> — data lives in this browser only. Add your Firebase config in <code>js/config.js</code> to go live.`;
   document.body.prepend(b);
 }
 
